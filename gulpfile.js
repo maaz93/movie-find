@@ -1,13 +1,22 @@
 var gulp = require("gulp");
-var broswerify = require("browserify");
+var browserify = require("browserify");
 var reactify = require("reactify");
 var source = require("vinyl-source-stream");
+var sourcemaps = require('gulp-sourcemaps');
+var buffer = require('vinyl-buffer');
+var watchify = require('watchify');
+var babel = require('babelify');
 
 gulp.task("browserify", function () {
-    broswerify("./src/js/main.js")
-        .transform("reactify")
+    browserify("./src/js/main.js")
+        .transform(babel.configure({
+            presets: ["es2015", "react"]
+        }))
         .bundle()
         .pipe(source("main.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(sourcemaps.write("./"))
         .pipe(gulp.dest("dist/js"));
 });
 
