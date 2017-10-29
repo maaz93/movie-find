@@ -8,7 +8,7 @@ var watchify = require('watchify');
 var babel = require('babelify');
 
 gulp.task("browserify", function () {
-    browserify("./src/js/main.js")
+    browserify("./src/js/main.js", { debug: true })
         .transform(babel.configure({
             presets: ["es2015", "react"]
         }))
