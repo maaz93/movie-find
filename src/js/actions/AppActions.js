@@ -7,6 +7,12 @@ const AppActions = {
             actionType: AppConstants.SEARCH_MOVIES,
             movie
         });
+    },
+    receiveMovieResults(movies) {
+        AppDispatcher.handleViewAction({
+            actionType: AppConstants.RECEIVE_MOVIE_RESULTS,
+            movies
+        });
     }
 };
 
