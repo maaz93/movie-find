@@ -2,6 +2,7 @@ import React from "react";
 import AppActions from "../actions/AppActions";
 import AppStore from "../stores/AppStore";
 import SearchForm from "./SearchForm";
+import MovieResults from "./MovieResults";
 
 class App extends React.Component {
 
@@ -28,8 +29,13 @@ class App extends React.Component {
     }
 
     render() {
-        console.log(this.state.movies);
-        return (<SearchForm />);
+        const isResultsAvailable = this.state.movies.length !== 0;
+        return (
+            <div>
+                <SearchForm />
+                {isResultsAvailable ? <MovieResults movies={this.state.movies} /> : null}
+            </div>
+        );
     }
 }
 
