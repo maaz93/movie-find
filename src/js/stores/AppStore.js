@@ -5,14 +5,14 @@ import AppAPI from "../utils/appAPI";
 
 const CHANGE_EVENT = "change";
 
-let _movies = [];
+let _movies = [], _searchInProgress = false;
 
 const AppStore = Object.assign({}, EventEmitter.prototype, {
-    setMovieResults(movies = []) {
-        _movies = movies;
-    },
     getMovieResults() {
         return _movies;
+    },
+    getSearchInProgress() {
+        return _searchInProgress;
     },
     emitChange() {
         this.emit(CHANGE_EVENT);
@@ -33,11 +33,13 @@ AppDispatcher.register((payload) => {
             const { movie } = action;
             console.log(`Searching for ${movie.title}`);
             AppAPI.searchMovies(movie);
-            AppStore.emit(CHANGE_EVENT);
+            _searchInProgress = true;
+            AppStore.emitChange();
             break;
         case AppConstants.RECEIVE_MOVIE_RESULTS:
-            AppStore.setMovieResults(action.movies);
-            AppStore.emit(CHANGE_EVENT);
+            _movies = action.movies;
+            _searchInProgress = false;
+            AppStore.emitChange();
             break;
     };
     return true;

@@ -9,13 +9,15 @@ class App extends React.Component {
         super(props);
         this._handleChange = this._handleChange.bind(this);
         this.state = {
-            movies: AppStore.getMovieResults()
+            movies: AppStore.getMovieResults(),
+            searchInProgress: false
         }
     }
 
     _handleChange() {
         this.setState({
-            movies: AppStore.getMovieResults()
+            movies: AppStore.getMovieResults(),
+            searchInProgress: AppStore.getSearchInProgress()
         });
     }
 
@@ -31,7 +33,7 @@ class App extends React.Component {
         const isResultsAvailable = this.state.movies.length !== 0;
         return (
             <div>
-                <SearchForm />
+                <SearchForm disabled={this.state.searchInProgress} />
                 {isResultsAvailable ? <MovieResults movies={this.state.movies} /> : null}
             </div>
         );
