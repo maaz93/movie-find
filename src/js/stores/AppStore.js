@@ -5,8 +5,7 @@ import AppAPI from "../utils/appAPI";
 
 const CHANGE_EVENT = "change";
 
-let _movies = [],
-    _selected = [];
+let _movies = [];
 
 const AppStore = Object.assign({}, EventEmitter.prototype, {
     setMovieResults(movies = []) {
