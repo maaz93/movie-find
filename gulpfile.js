@@ -6,12 +6,13 @@ var buffer = require("vinyl-buffer");
 var babel = require("babelify");
 var browserSync = require("browser-sync").create();
 
+var bundler = browserify("./src/js/main.js", { debug: true })
+    .transform(babel.configure({
+        presets: ["es2015", "react"]
+    }));
+
 gulp.task("browserify", function () {
-    return browserify("./src/js/main.js", { debug: true })
-        .transform(babel.configure({
-            presets: ["es2015", "react"]
-        }))
-        .bundle()
+    return bundler.bundle()
         .pipe(source("main.js"))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
@@ -38,5 +39,5 @@ gulp.task("default", ["browserify", "copy"], function () {
             baseDir: "./dist"
         }
     });
-    return gulp.watch("./src/**/*.*", ["src-watch"]);
+    return gulp.watch(["./src/**/index.html", "./src/**/*.js", "./src/**/*.css"], ["src-watch"]);
 });
