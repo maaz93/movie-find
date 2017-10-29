@@ -1,14 +1,13 @@
 var gulp = require("gulp");
 var browserify = require("browserify");
-var reactify = require("reactify");
 var source = require("vinyl-source-stream");
-var sourcemaps = require('gulp-sourcemaps');
-var buffer = require('vinyl-buffer');
-var watchify = require('watchify');
-var babel = require('babelify');
+var sourcemaps = require("gulp-sourcemaps");
+var buffer = require("vinyl-buffer");
+var babel = require("babelify");
+var browserSync = require("browser-sync").create();
 
 gulp.task("browserify", function () {
-    browserify("./src/js/main.js", { debug: true })
+    return browserify("./src/js/main.js", { debug: true })
         .transform(babel.configure({
             presets: ["es2015", "react"]
         }))
@@ -27,6 +26,17 @@ gulp.task("copy", function () {
         .pipe(gulp.dest("dist/css"));
 })
 
+// Reloading task
+gulp.task("src-watch", ["browserify", "copy"], function (done) {
+    browserSync.reload();
+    done();
+});
+
 gulp.task("default", ["browserify", "copy"], function () {
-    return gulp.watch("./src/**/*.*", ["browserify", "copy"]);
+    browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+    return gulp.watch("./src/**/*.*", ["src-watch"]);
 });
