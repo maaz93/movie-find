@@ -10,14 +10,16 @@ class App extends React.Component {
         this._handleChange = this._handleChange.bind(this);
         this.state = {
             movies: AppStore.getMovieResults(),
-            searchInProgress: false
+            searchInProgress: false,
+            searchedOnce: false
         }
     }
 
     _handleChange() {
         this.setState({
             movies: AppStore.getMovieResults(),
-            searchInProgress: AppStore.getSearchInProgress()
+            searchInProgress: AppStore.getSearchInProgress(),
+            searchedOnce: AppStore.getSearchedOnce()
         });
     }
 
@@ -30,11 +32,11 @@ class App extends React.Component {
     }
 
     render() {
-        const isResultsAvailable = this.state.movies.length !== 0;
+        const resultsVisible = this.state.searchedOnce && !this.state.searchInProgress;
         return (
             <div>
                 <SearchForm disabled={this.state.searchInProgress} />
-                {isResultsAvailable ? <MovieResults movies={this.state.movies} /> : null}
+                {resultsVisible ? <MovieResults movies={this.state.movies} /> : null}
             </div>
         );
     }

@@ -8,7 +8,7 @@ class Movie extends React.Component {
             <div className="well">
                 <div className="row">
                     <div className="col-md-4">
-                        <img className="thumbnail" src={movie.poster.thumb} />
+                        <img className="thumbnail" src={movie.poster.thumb} alt="No thumbnail available."/>
                     </div>
                     <div className="col-md-8">
                         <h4>{movie.title}</h4>

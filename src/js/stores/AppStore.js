@@ -5,7 +5,7 @@ import AppAPI from "../utils/appAPI";
 
 const CHANGE_EVENT = "change";
 
-let _movies = [], _searchInProgress = false;
+let _movies = [], _searchInProgress = false, _searchedOnce = false;
 
 const AppStore = Object.assign({}, EventEmitter.prototype, {
     getMovieResults() {
@@ -13,6 +13,9 @@ const AppStore = Object.assign({}, EventEmitter.prototype, {
     },
     getSearchInProgress() {
         return _searchInProgress;
+    },
+    getSearchedOnce() {
+        return _searchedOnce;
     },
     emitChange() {
         this.emit(CHANGE_EVENT);
@@ -31,13 +34,14 @@ AppDispatcher.register((payload) => {
     switch (action.actionType) {
         case AppConstants.SEARCH_MOVIES:
             const { movie } = action;
-            console.log(`Searching for ${movie.title}`);
+            console.debug(`Searching for ${movie.title}`);
             AppAPI.searchMovies(movie);
             _searchInProgress = true;
             AppStore.emitChange();
             break;
         case AppConstants.RECEIVE_MOVIE_RESULTS:
-            _movies = action.movies;
+            _movies = action.movies || [];
+            _searchedOnce = true;
             _searchInProgress = false;
             AppStore.emitChange();
             break;
